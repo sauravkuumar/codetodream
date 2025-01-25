@@ -146,55 +146,107 @@
                 display: none;
             }
         }
+        .contact-us {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-us h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .contact-us form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-us form input,
+        .contact-us form textarea,
+        .contact-us form button {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .contact-us form button {
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .contact-us form button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="banner">
-        <img src="/images/banner.png" alt="Banner Image">
+        <img src="https://i.ibb.co/MhcQdc3/banner.png" alt="Banner Image">
     </div>
     <div class="details">
         <div class="section">
             <h2>Website</h2>
+            <img src="https://i.ibb.co/hDSk6Hv/website.jpg" width="220px" height="230">
             <p>We design and develop modern, responsive websites tailored to your needs.</p>
             <a href="#">Learn More</a>
         </div>
         <div class="section">
             <h2>App</h2>
+            <img src="https://i.ibb.co/Y0bvFtP/mobile.png">
             <p>Our team builds user-friendly mobile apps for Android and iOS platforms.</p>
             <a href="#">Learn More</a>
         </div>
         <div class="section">
             <h2>Startup</h2>
+            <img src="https://i.ibb.co/NVdtKq1/bihar.jpg">
             <p>We help startups bring their ideas to life with innovative solutions.</p>
             <a href="#">Learn More</a>
         </div>
         <div class="section">
             <h2>Content Creation</h2>
+            <img src="https://i.ibb.co/D5Jh8VW/LOGO-YOUTUBE.png" width="200px">
             <p>Our creative team produces engaging content to boost your brand.</p>
             <a href="#">Learn More</a>
         </div>
     </div>
     <div class="navbar">
         <a href="#">
-            <img src="/images/home.png" alt="Home Icon" width="24">
+            <img src="https://i.ibb.co/jTxtXCP/home.png" alt="Home Icon" width="24">
             <span>Home</span>
         </a>
         <a href="#">
-            <img src="/images/chat.jpg" alt="Chat Icon" width="34">
+            <img src="https://i.ibb.co/jzbRkpZ/chat.jpg" alt="Chat Icon" width="34">
             <span>Chat</span>
         </a>
         <a href="#">
-            <img src="/images/service.png" alt="Service Icon" width="24">
+            <img src="https://i.ibb.co/2hqVLWD/service.png" alt="Service Icon" width="24">
             <span>Service</span>
         </a>
         <a href="#">
-            <img src="/images/mentor.png" alt="Mentor Icon" width="24">
+            <img src="https://i.ibb.co/yQWCHBG/mentor.png" alt="Mentor Icon" width="24">
             <span>Mentor</span>
         </a>
         <a href="#">
-            <img src="/images/account.png" alt="Account Icon" width="24">
+            <img src="https://i.ibb.co/5vsw8F4/account.png/images/account.png" alt="Account Icon" width="24">
             <span>Account</span>
         </a>
+    </div>
+    <div class="contact-us">
+        <h2>Contact Us</h2>
+        <form action="submit_contact.php" method="POST">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Submit</button>
+        </form>
     </div>
     <div class="navbar-desktop">
         <a href="#">Home</a>
@@ -205,3 +257,39 @@
     </div>
 </body>
 </html>
+
+<?php
+// submit_contact.php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "codetodream";
+
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $message = $_POST['message'];
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $sql = "INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $name, $email, $message);
+
+    if ($stmt->execute()) {
+        echo "Message submitted successfully!";
+    } else {
+        echo "Error: " . $conn->error;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
